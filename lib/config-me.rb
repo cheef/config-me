@@ -1,72 +1,36 @@
-require "config-me/version"
+require 'active_support/dependencies/autoload'
 
 module ConfigMe
 
-  class UndefinedSetting < Exception; end
+  @current = nil
+  @configurations = {}
 
-  module Configuration
-    def self.parse! &definitions
-      @tree = DefinitionsParser.parse! &definitions
-    end
-
-    def self.clear!
-      @tree = nil
-    end
-
-    private
-
-      def self.method_missing method, *args, &block
-        if @tree.has_key? method
-          @tree[ method ]
-        else
-          raise ConfigMe::UndefinedSetting.new(%(Undefined setting "#{method}"))
-        end
-      end
-  end
-
-  class Node < Hash
-    def method_missing method, *args, &block
-      if has_key? method
-        self[ method ]
-      else
-        raise ConfigMe::UndefinedSetting.new(%(Undefined setting "#{@breadcrumbs}.#{method}"))
-      end
-    end
-  end
-
-  class DefinitionsParser
-
-    def self.parse! &definitions
-      new(&definitions).instance_variable_get(:@store)
-    end
-
-    def initialize &definitions
-      @store = Node.new
-      instance_exec &definitions
-    end
-
-    private
-
-      def method_missing method, *args, &definitions
-        @store[ method ] = if block_given?
-          DefinitionsParser.parse!(&definitions)
-        else
-          args.first
-        end
-      end
-  end
+  autoload :VERSION,           'config-me/version'
+  autoload :Node,              'config-me/node'
+  autoload :Configuration,     'config-me/configuration'
+  autoload :DefinitionsParser, 'config-me/definitions_parser'
+  autoload :UndefinedSetting,  'config-me/errors'
+  autoload :UndefinedScope,    'config-me/errors'
+  autoload :ConfigurationsNotDefined, 'config-me/errors'
 
   private
 
     def self.method_missing method, *args, &block
-      Configuration.send method, *args, &block
+      raise ConfigMe::ConfigurationsNotDefined if @current.nil?
+      @current.send method, *args, &block
     end
 end
 
-def ConfigMe &definitions
+def ConfigMe scope = :global, &definitions
+  configurations = ConfigMe.instance_variable_get :@configurations
+
   if block_given?
-    ConfigMe::Configuration.parse! &definitions
+    configurations[scope] = ConfigMe::Configuration.new(&definitions)
+    ConfigMe.instance_variable_set :@configurations, configurations
+    ConfigMe.instance_variable_set :@current, configurations[scope]
   else
-    const_get :ConfigMe
+    raise ConfigMe::UndefinedScope.new(scope) unless configurations.has_key?(scope)
+    ConfigMe.instance_variable_set :@current, configurations[scope]
+    ConfigMe
   end
 end

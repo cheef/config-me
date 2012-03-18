@@ -1,4 +1,4 @@
-Feature: defining configuration through blocks
+Feature: defining configuration using blocks
 
   Scenario: set 1st level setting
     Given an empty configuration
@@ -55,4 +55,12 @@ Feature: defining configuration through blocks
     | proc { 'foo' } | Proc      |
     | Time.now       | Time      |
     | Date.today     | Date      |
+
+  Scenario: try to get setting before defining any configuration
+    Given an empty configuration
+    And I ask for an "ConfigMe.foo" setting
+    Then It should raise error "ConfigMe::ConfigurationsNotDefined" with message:
+    """
+    No configurations were defined
+    """
 

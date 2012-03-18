@@ -25,3 +25,9 @@ end
 Then /^It should raise error "([^"]*)"$/ do |klass|
   @error.class.name.should == klass
 end
+
+Then /^It should raise error "([^"]*)" with message:$/ do |klass, message|
+  step %(It should raise error "#{klass}")
+  @error.message.should == message
+end
+
