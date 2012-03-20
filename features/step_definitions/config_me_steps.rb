@@ -31,3 +31,8 @@ Then /^It should raise error "([^"]*)" with message:$/ do |klass, message|
   @error.message.should == message
 end
 
+When /^I rewrite setting with using code below:$/ do |code_string|
+  eval code_string
+end
+
+

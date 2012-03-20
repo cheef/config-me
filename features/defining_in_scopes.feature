@@ -18,7 +18,7 @@ Feature: defining configuration in different scopes
       foo 'bar'
     end
     """
-    Then setting "ConfigMe(:global).foo" should be equal to "bar"
+    Then setting "ConfigMe(:production).foo" should be equal to "bar"
 
   Scenario: try to get setting from not existing configuration and make sure that proper error raise
     Given an empty configuration
@@ -33,3 +33,20 @@ Feature: defining configuration in different scopes
     """
     Undefined scope "test"
     """
+
+  Scenario: define configuration in several scopes
+    Given an empty configuration
+    When I define configuration below:
+    """
+    ConfigMe :bar do
+      foo 'bar'
+    end
+    """
+    When I define configuration below:
+    """
+    ConfigMe :foo do
+      foo 'foo'
+    end
+    """
+    Then setting "ConfigMe(:foo).foo" should be equal to "foo"
+    And setting "ConfigMe(:bar).foo" should be equal to "bar"

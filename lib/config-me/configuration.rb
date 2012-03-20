@@ -12,10 +12,6 @@ class ConfigMe::Configuration
   private
 
     def method_missing method, *args, &block
-      if @tree.has_key? method
-        @tree[ method ]
-      else
-        raise ConfigMe::UndefinedSetting.new(%W(ConfigMe #{method}))
-      end
+      @tree.send method, *args, &block
     end
 end

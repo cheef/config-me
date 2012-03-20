@@ -21,7 +21,7 @@ module ConfigMe
     end
 end
 
-def ConfigMe scope = :global, &definitions
+def ConfigMe scope = :production, &definitions
   configurations = ConfigMe.instance_variable_get :@configurations
 
   if block_given?
