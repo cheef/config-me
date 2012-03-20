@@ -5,25 +5,43 @@ Feature: dump config data to hash
     When I define configuration below:
     """
     ConfigMe do
-      foo 'bar'
+      foo do
+        bar do
+          sample 'test'
+        end
+      end
     end
     """
-    And I rewrite setting with using code below:
+    And I dump config node "ConfigMe.foo" to hash
+    Then It should be a hash like:
     """
-    ConfigMe.foo = 'foo'
+    {
+      :bar => {
+        :sample => 'test'
+      }
+    }
     """
-    Then setting "ConfigMe.foo" should be equal to "foo"
 
   Scenario: define config and then dump all config to hash
     Given an empty configuration
     When I define configuration below:
     """
     ConfigMe do
-      foo 'bar'
+      foo do
+        bar do
+          sample 'test'
+        end
+      end
     end
     """
-    And I rewrite setting with using code below:
+    And I dump whole config to hash
+    Then It should be a hash like:
     """
-    ConfigMe.foo = 'foo'
+    {
+      :foo => {
+        :bar => {
+          :sample => 'test'
+        }
+      }
+    }
     """
-    Then setting "ConfigMe.foo" should be equal to "foo"

@@ -5,29 +5,41 @@ Feature: possibility to rewrite existing setting
     When I define configuration below:
     """
     ConfigMe do
-      foo do
-        bar do
-          sample 'test'
-        end
-      end
+      foo 'bar'
     end
     """
-    And I dump config node "ConfigMe.foo" to hash
-    Then It should be a hash
-    And hash should have "bar" key
+    And I rewrite setting with using code below:
+    """
+    ConfigMe.foo = 'foo'
+    """
+    Then setting "ConfigMe.foo" should be equal to "foo"
 
   Scenario: define config and try add new setting to existing node
     Given an empty configuration
     When I define configuration below:
     """
     ConfigMe do
-      foo do
-        bar do
-          sample 'test'
-        end
-      end
+      foo 'bar'
     end
     """
-    And I dump whole config to hash
-    Then It should be a hash
-    And hash should have "foo" key
+    And I rewrite setting with using code below:
+    """
+    ConfigMe.bar = 'foo'
+    """
+    Then setting "ConfigMe.bar" should be equal to "foo"
+
+  Scenario: define config and try rewrite whole node
+    Given an empty configuration
+    When I define configuration below:
+    """
+    ConfigMe do
+      foo 'bar'
+    end
+    """
+    And I rewrite setting with using code below:
+    """
+    ConfigMe.foo do
+      bar 'foo'
+    end
+    """
+    Then setting "ConfigMe.foo.bar" should be equal to "foo"
