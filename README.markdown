@@ -66,17 +66,17 @@ But we could define it using blocks structure:
 Every time you define configuration in some namespace, the default is ```:production```,
 but you can provide the namespace name you want:
 
-   ConfigMe do
-     foo 'bar'
-   end
+    ConfigMe do
+      foo 'bar'
+    end
 
-   ConfigMe(:development) do
-     foo 'foo'
-   end
+    ConfigMe(:development) do
+      foo 'foo'
+    end
 
-   ConfigMe.foo               # => 'bar'
-   ConfigMe(:production).foo  # => 'bar'
-   ConfigMe(:development).foo # => 'foo'
+    ConfigMe.foo               # => 'bar'
+    ConfigMe(:production).foo  # => 'bar'
+    ConfigMe(:development).foo # => 'foo'
 
 ## Dumping config to hash
 
