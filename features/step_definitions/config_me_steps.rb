@@ -35,4 +35,22 @@ When /^I rewrite setting with using code below:$/ do |code_string|
   eval code_string
 end
 
+When /^I dump config node "([^"]*)" to hash$/ do |code_string|
+  @hash = eval(code_string).to_hash
+end
 
+Then /^It should be a hash like:$/ do |string_with_hash|
+  @hash.should == eval(string_with_hash)
+end
+
+When /^I dump whole config to hash$/ do
+  @hash = ConfigMe.to_hash
+end
+
+Given /^an yaml file with configuration below:$/ do |string|
+  pending # express the regexp above with the code you wish you had
+end
+
+When /^I read configuration from this yaml file$/ do
+  pending # express the regexp above with the code you wish you had
+end
