@@ -1,5 +1,5 @@
 Given /^an empty configuration$/ do
-  ConfigMe::Configuration.clear!
+  ConfigMe::Base.clear!
 end
 
 When /^I define configuration below:$/ do |code_string|
@@ -48,9 +48,34 @@ When /^I dump whole config to hash$/ do
 end
 
 Given /^an yaml file with configuration below:$/ do |string|
-  pending # express the regexp above with the code you wish you had
+  require 'tempfile'
+  @yaml_file = Tempfile.new('yaml')
+  @yaml_file.write string
+  @yaml_file.close
+
+  @yaml = @yaml_file.path
 end
 
-When /^I read configuration from this yaml file$/ do
-  pending # express the regexp above with the code you wish you had
+When /^I read configuration from this yaml file:$/ do |string|
+  eval string
+end
+
+When /^I read configuration from this yaml string:$/ do |string|
+  eval string
+end
+
+Given /^an configuration hash:$/ do |string|
+  eval string
+end
+
+When /^I read configuration from this hash:$/ do |string|
+  eval string
+end
+
+Then /^setting "([^"]*)" should be a kind of "([^"]*)"$/ do |string, klass|
+  eval(string).class.name.should == klass
+end
+
+Given /^disabled proc auto calling$/ do
+  ConfigMe::Defaults.proc_auto_calling = false
 end

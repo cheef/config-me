@@ -1,36 +1,29 @@
 require 'active_support/dependencies/autoload'
+require 'active_support/core_ext/class/attribute_accessors'
 
 module ConfigMe
-
-  @current = nil
-  @configurations = {}
-
-  autoload :VERSION,           'config-me/version'
-  autoload :Node,              'config-me/node'
-  autoload :Configuration,     'config-me/configuration'
+  autoload :Base,              'config-me/base'
+  autoload :Defaults,          'config-me/defaults'
   autoload :DefinitionsParser, 'config-me/definitions_parser'
-  autoload :UndefinedSetting,  'config-me/errors'
-  autoload :UndefinedScope,    'config-me/errors'
-  autoload :ConfigurationsNotDefined, 'config-me/errors'
+  autoload :Importer,          'config-me/importer'
+  autoload :Node,              'config-me/node'
+  autoload :Runner,            'config-me/runner'
+  autoload :VERSION,           'config-me/version'
+
+  # Errors
+  autoload :UnrecognizedError,       'config-me/errors'
+  autoload :UndefinedSetting,        'config-me/errors'
+  autoload :ConfigurationNotDefined, 'config-me/errors'
+  autoload :WrongFormat,             'config-me/errors'
 
   private
 
     def self.method_missing method, *args, &block
-      raise ConfigMe::ConfigurationsNotDefined if @current.nil?
-      @current.send method, *args, &block
+      ConfigMe::Base.delegate_to_current_configuration method, *args, &block
     end
+
 end
 
-def ConfigMe scope = :production, &definitions
-  configurations = ConfigMe.instance_variable_get :@configurations
-
-  if block_given?
-    configurations[scope] = ConfigMe::Configuration.new(&definitions)
-    ConfigMe.instance_variable_set :@configurations, configurations
-    ConfigMe.instance_variable_set :@current, configurations[scope]
-  else
-    raise ConfigMe::UndefinedScope.new(scope) unless configurations.has_key?(scope)
-    ConfigMe.instance_variable_set :@current, configurations[scope]
-    ConfigMe
-  end
+def ConfigMe namespace_or_options = ConfigMe::Defaults.namespace, &definitions
+  ConfigMe.tap { ConfigMe::Runner.parse namespace_or_options, &definitions }
 end

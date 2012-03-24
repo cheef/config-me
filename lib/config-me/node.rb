@@ -25,12 +25,23 @@ class ConfigMe::Node
     case
       when block_given?     then self[ method ] = ConfigMe::DefinitionsParser.parse!(@breadcrumbs, &definitions)
       when setter?(method)  then self[ setter_method(method) ] = args.first
-      when has_key?(method) then self[ method ]
+      when has_key?(method) then read_setting(method, *args)
       else raise ConfigMe::UndefinedSetting.new(@breadcrumbs + [method])
     end
   end
 
   private
+
+    def read_setting name, *args
+      value = self[ name ]
+
+      case
+        when value.is_a?(Proc) && ConfigMe::Defaults.proc_auto_calling
+          value.call(*args)
+        else
+          value
+      end
+    end
 
     def setter? key
       key.to_s =~ /^[a-zA-Z0-9_]+=$/

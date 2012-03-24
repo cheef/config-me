@@ -59,8 +59,8 @@ Feature: defining configuration using blocks
   Scenario: try to get setting before defining any configuration
     Given an empty configuration
     And I ask for an "ConfigMe.foo" setting
-    Then It should raise error "ConfigMe::ConfigurationsNotDefined" with message:
+    Then It should raise error "ConfigMe::ConfigurationNotDefined" with message:
     """
-    No configurations were defined
+    Configuration :production not defined
     """
 

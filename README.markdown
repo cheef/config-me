@@ -78,6 +78,21 @@ but you can provide the namespace name you want:
     ConfigMe(:production).foo  # => 'bar'
     ConfigMe(:development).foo # => 'foo'
 
+## Importing from hash
+
+If you have a some hash:
+
+    my_hash = { :foo => { :bar => 'test' } }
+
+Your could import it:
+
+    ConfigMe :hash => my_hash
+    ConfigMe.foo.bar # => 'test'
+
+## Importing from yaml
+
+    ConfigMe :yaml => '/path/to/my/yaml/configuration'
+
 ## Dumping config to hash
 
     ConfigMe do
@@ -88,6 +103,26 @@ but you can provide the namespace name you want:
 
     ConfigMe.to_hash     # => { :foo => { :bar => 'test' } }
     ConfigMe.foo.to_hash # => { :bar => 'test' }
+
+## Auto calling procs
+
+By default if you assign ```proc``` to setting value, then it will be executed while reading. I mean:
+
+    ConfigMe do
+      foo proc { 5 + 5 }
+      bar proc { |count| count * 2 }
+    end
+
+    ConfigMe.foo    # => 10
+    ConfigMe.bar(2) # => 4
+
+But you could disable this feature:
+
+    ConfigMe::Defaults.auto_calling_proc = false
+
+## Rails 3 integration
+
+This will be implemented in separate gem ```config-me-rails3``` very soon.
 
 
 

@@ -29,10 +29,11 @@ Feature: if setting value is proc then it should be called automatically when it
   assign proc to one of the setting
   then ask this setting and make sure that proc is not called automatically
     Given an empty configuration
+    And disabled proc auto calling
     When I define configuration below:
     """
     ConfigMe do
       foo proc { 'bar' }
     end
     """
-    Then setting "ConfigMe.foo" should be equal a kind of "Proc"
+    Then setting "ConfigMe.foo" should be a kind of "Proc"
