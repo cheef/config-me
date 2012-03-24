@@ -1,4 +1,4 @@
-# ConfigMe
+# Config Me [![Build Status](https://secure.travis-ci.org/cheef/config-me.png "Build Status")](http://travis-ci.org/cheef/config-me) [![Dependency Status](https://gemnasium.com/cheef/config-me.png "Dependency Status")](https://gemnasium.com/cheef/config-me)
 
 Gem provides convenient tool for storing file based configurations.
 
