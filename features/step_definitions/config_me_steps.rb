@@ -28,7 +28,7 @@ end
 
 Then /^It should raise error "([^"]*)" with message:$/ do |klass, message|
   step %(It should raise error "#{klass}")
-  @error.message.should == message
+  @error.message.should =~ %r(#{message})
 end
 
 When /^I rewrite setting with using code below:$/ do |code_string|

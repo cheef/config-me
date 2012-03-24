@@ -1,24 +1,24 @@
 module ConfigMe
 
-  class UnrecognizedError < Exception
+  class UnrecognizedError < RuntimeError
     def initialize
       super "Really something wrong"
     end
   end
 
-  class ConfigurationNotDefined < Exception
+  class ConfigurationNotDefined < StandardError
     def initialize name
       super "Configuration :#{name} not defined"
     end
   end
 
-  class UndefinedSetting < Exception
+  class UndefinedSetting < ArgumentError
     def initialize breadcrumbs
       super %(Undefined setting "#{breadcrumbs.join('.')}")
     end
   end
 
-  class WrongFormat < Exception
+  class WrongFormat < ArgumentError
     def initialize expected, received
       super %(Expected #{expected} format, but received #{received})
     end
