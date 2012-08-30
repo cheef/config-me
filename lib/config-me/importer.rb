@@ -20,8 +20,8 @@ module ConfigMe::Importer
 
   def self.with_configuration namespace
     ConfigMe::Base.new.tap do |configuration|
-      yield configuration
       ConfigMe::Base.configurations ||= {}
+      yield configuration
       ConfigMe::Base.configurations[ namespace ] = configuration
     end
   end

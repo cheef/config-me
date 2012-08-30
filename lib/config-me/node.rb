@@ -1,7 +1,8 @@
 class ConfigMe::Node
 
   def initialize breadcrumbs = []
-    @values, @breadcrumbs = {}, breadcrumbs
+    @values      = {}
+    @breadcrumbs = breadcrumbs.dup
   end
 
   def []=(key, value)

@@ -1,22 +1,20 @@
 class ConfigMe::DefinitionsParser
 
   def self.parse! breadcrumbs = [], &definitions
-    new(breadcrumbs, &definitions).instance_variable_get(:@store)
+    new(breadcrumbs, &definitions).instance_variable_get(:@node)
   end
 
   def initialize breadcrumbs = [], &definitions
-    @store = ConfigMe::Node.new(breadcrumbs)
+    @node = ConfigMe::Node.new(breadcrumbs)
     instance_exec &definitions
   end
 
   private
 
     def method_missing method, *args, &definitions
-      @store[ method ] = if block_given?
-        breadcrumbs = @store.instance_variable_get(:@breadcrumbs)
-        breadcrumbs << method
-
-        ConfigMe::DefinitionsParser.parse! breadcrumbs, &definitions
+      @node[ method ] = if block_given?
+        breadcrumbs = @node.instance_variable_get(:@breadcrumbs)
+        ConfigMe::DefinitionsParser.parse! breadcrumbs + [ method ], &definitions
       else
         args.first
       end

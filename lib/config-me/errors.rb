@@ -14,8 +14,14 @@ module ConfigMe
 
   class UndefinedSetting < ArgumentError
     def initialize breadcrumbs
-      super %(Undefined setting "#{breadcrumbs.join('.')}")
+      super %(Undefined setting "#{breadcrumbs.join('.')}" for "#{namespace}" configuration)
     end
+
+    private
+
+      def namespace
+        ConfigMe::Base.current_namespace || ConfigMe::Defaults.namespace
+      end
   end
 
   class WrongFormat < ArgumentError
