@@ -1,4 +1,4 @@
-# Config Me [![Build Status](https://secure.travis-ci.org/cheef/config-me.png "Build Status")](http://travis-ci.org/cheef/config-me) [![Dependency Status](https://gemnasium.com/cheef/config-me.png "Dependency Status")](https://gemnasium.com/cheef/config-me) [![Gem Version](https://badge.fury.io/rb/config-me.png)](http://badge.fury.io/rb/config-me)
+# Config Me [![Build Status](https://secure.travis-ci.org/cheef/config-me.png "Build Status")](http://travis-ci.org/cheef/config-me) [![Coverage Status](https://coveralls.io/repos/cheef/config-me/badge.png)](https://coveralls.io/r/cheef/config-me) [![Dependency Status](https://gemnasium.com/cheef/config-me.png "Dependency Status")](https://gemnasium.com/cheef/config-me) [![Gem Version](https://badge.fury.io/rb/config-me.png)](http://badge.fury.io/rb/config-me)
 
 Gem provides convenient tool for storing file based configurations.
 
